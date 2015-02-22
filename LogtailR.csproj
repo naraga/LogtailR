@@ -72,20 +72,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirectoryLogSource.cs" />
+    <Compile Include="FileTailReader.cs" />
+    <Compile Include="Web\Hubs\LogTailHub.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomLogger.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="TailBroadcastingService.cs" />
+    <Compile Include="TailListeningSessionsRepository.cs" />
+    <Compile Include="TextChunkSplitter.cs" />
+    <Compile Include="TextChunksStreamReader.cs" />
+    <Compile Include="Web\Hubs\TailSessionSettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.6.4.js" />
-    <Content Include="Scripts\jquery-1.6.4.min.js" />
-    <Content Include="Scripts\jquery.signalR-2.2.0.js" />
-    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+    <Content Include="Web\App\Logtail.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web\Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Web\Scripts\jquery-1.6.4.js" />
+    <Content Include="Web\Scripts\jquery-1.6.4.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web\Scripts\jquery.signalR-2.2.0.js" />
+    <Content Include="Web\Scripts\jquery.signalR-2.2.0.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web\Styles\style.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

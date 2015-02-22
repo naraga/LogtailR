@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Logtail</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="/web/Styles/style.css" rel="stylesheet" />
+</head>
+    <body>
+        <header>
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-12">
+                        <div>Include:</div>
+                        <input type="text" id="includeRx" />
+                        <div>Exclude:</div>
+                        <input type="text" id="excludeRx" />
+                    
+                        <div>Red:</div>
+                        <input type="text" id="redColorRx" />
+                        <div>White:</div>
+                        <input type="text" id="whiteColorRx" />
+                        <div>Yellow:</div>
+                        <input type="text" id="yellowColorRx" />
+                    </div>
+                </div>
+                <input type="button" title="Start" id="startBtn" value="Start" />
+                <input type="button" title="Stop" id="stopBtn" value="Stop" />
+            </div>
+        </header>
+
+
+        <div class="wrapper">
+            <div class="row">
+                <div id="messages" class="messages-tail"></div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-12">
+                        xxx
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script src="/web/scripts/jquery-1.6.4.min.js"></script>
+        <script src="/web/scripts/jquery.signalr-2.2.0.min.js"></script>
+        <script src="/signalr/js"></script>
+        <script>
+            $(function () {
+                "use strict";
+
+
+                var logTail = $.connection.logTailHub;
+                logTail.client.newMessage = function (msg) {
+                    //console.log(msg);
+                    var encodedContent = $('<div />').text(msg.Message.Content).html();
+                    $("#messages").append("<div class='" + msg.Color + "-msg'>" + encodedContent + '</div>');
+                };
+
+                $.connection.hub.logging = true;
+                $.connection.hub.start().done(function () {
+                    // updates tail settings from server
+                    logTail.server.getTailSettings().done(function (tailSettings) {
+                        console.log(tailSettings);
+                        $("#includeRx").val(tailSettings.IncludeRx);
+                        $("#excludeRx").val(tailSettings.ExcludeRx);
+                        $("#redColorRx").val(tailSettings.RedColorRx);
+                        $("#whiteColorRx").val(tailSettings.WhiteColorRx);
+                        $("#yellowColorRx").val(tailSettings.YellowColorRx);
+                    });
+
+                    $("#startBtn").click(function () {
+
+                        // starts with new tail settings
+                        logTail.server.startStreaming(
+                            {
+                                IncludeRx: $("#includeRx").val(),
+                                ExcludeRx: $("#excludeRx").val(),
+                                RedColorRx: $("#redColorRx").val(),
+                                WhiteColorRx: $("#whiteColorRx").val(),
+                                YellowColorRx: $("#yellowColorRx").val()
+                            }
+                        );
+                    });
+
+                    $("#stopBtn").click(function () {
+                        logTail.server.stopStreaming();
+                    });
+                });
+            });
+        </script>
+    </body>
+
+
+</html>
