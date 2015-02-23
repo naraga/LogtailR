@@ -14,10 +14,19 @@ namespace LogtailR
         /// <returns></returns>
         public static IEnumerable<string> Split(string s, string bomRx)
         {
+            if (string.IsNullOrEmpty(bomRx))
+            {
+                yield return s;
+                yield break;
+            }
+
             var matches = Regex.Matches(s, bomRx, RegexOptions.Multiline).OfType<Match>().ToList();
 
             if (matches.Count == 0)
+            {
+                yield return s;
                 yield break;
+            }
 
             // yields preamble (anything before first BOM)
             if (matches[0].Index != 0)
