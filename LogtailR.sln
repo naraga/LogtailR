@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogtailR", "LogtailR.csproj", "{1272D9F9-EAA6-4DFC-BBA0-75CD54FBE897}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogtailR", "src\LogtailR.csproj", "{1272D9F9-EAA6-4DFC-BBA0-75CD54FBE897}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
