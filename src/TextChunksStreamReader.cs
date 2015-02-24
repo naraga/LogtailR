@@ -2,7 +2,7 @@
 
 namespace LogtailR
 {
-    class TextChunksStreamReader
+    public class TextChunksStreamReader
     {
         private readonly IEnumerable<TextChunk> _chunksSource;
         private OutputSettings _outputSettings;
@@ -19,11 +19,18 @@ namespace LogtailR
             _outputSettings = new OutputSettings();
         }
 
+        /// <summary>
+        /// Splits into messages. Omits  whitespace messages
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<LogMessage> GetMessages()
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var chunk in _chunksSource)
             {
+                if(chunk.IsEmpty)
+                    continue;
+
                 var bomRx = string.IsNullOrWhiteSpace(_outputSettings.BeginingOfMessageRx)
                     ? DefaultBomRx
                     : _outputSettings.BeginingOfMessageRx;

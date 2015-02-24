@@ -86,6 +86,18 @@ namespace LogtailR
         public bool IsEmpty { get { return String.IsNullOrEmpty(Text); } }
         public long StartPosition { get; set; }
 
+        public TextChunk()
+        {
+        }
+
+        public TextChunk(string text, string source, long startPosition)
+        {
+            Text = text;
+            Source = source;
+            StartPosition = startPosition;
+            EndPosition = StartPosition + text.Length;
+        }
+
         public static TextChunk CreateEmpty(long lastPosition, string source)
         {
             return new TextChunk

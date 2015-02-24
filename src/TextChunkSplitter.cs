@@ -14,6 +14,7 @@ namespace LogtailR
         /// <returns></returns>
         public static IEnumerable<string> Split(string s, string bomRx)
         {
+            // no BOM specified - yield as single chunk
             if (string.IsNullOrEmpty(bomRx))
             {
                 yield return s;
@@ -22,6 +23,7 @@ namespace LogtailR
 
             var matches = Regex.Matches(s, bomRx, RegexOptions.Multiline).OfType<Match>().ToList();
 
+            // no BOM found - yield as single chunk
             if (matches.Count == 0)
             {
                 yield return s;
