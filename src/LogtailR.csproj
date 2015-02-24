@@ -78,7 +78,6 @@
     <Compile Include="Web\Hubs\LogTailHub.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomLogger.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="TailBroadcastingService.cs" />
     <Compile Include="TailListeningSessionsRepository.cs" />

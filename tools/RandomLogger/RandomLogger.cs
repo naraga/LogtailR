@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Threading;
 
-namespace LogtailR
+namespace RandomLogger
 {
     class RandomLogger
     {
@@ -10,10 +10,10 @@ namespace LogtailR
         private readonly string _logFileName;
         private readonly Random _rnd;
 
-        public RandomLogger(string directory, int writeIntervalMs = 1000)
+        public RandomLogger(string directory, string logFileName = null, int writeIntervalMs = 1000)
         {
             _writeIntervalMs = writeIntervalMs;
-            _logFileName = Path.Combine(directory, DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".log");
+            _logFileName = Path.Combine(directory, logFileName ?? string.Format("{0:yyyyMMdd_HHmmss}_{1}.log", DateTime.Now, DateTime.Now.Ticks));
             _rnd = new Random();
         }
 
@@ -29,6 +29,7 @@ namespace LogtailR
                 File.AppendAllLines(_logFileName, new []{GetNewLogRecord()});
                 Thread.Sleep(_writeIntervalMs);
             }
+// ReSharper disable once FunctionNeverReturns
         }
 
 
