@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="DirectoryLogSource.cs" />
     <Compile Include="FileTailReader.cs" />
+    <Compile Include="TextChunk.cs" />
     <Compile Include="Web\Hubs\LogTailHub.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
