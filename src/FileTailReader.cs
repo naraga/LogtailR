@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -19,6 +18,10 @@ namespace LogtailR
             LastPosition = new FileInfo(_fileName).Length;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Newly appended chunk of text or NULL when unable to read file or Empty when no updates.</returns>
         public async Task<TextChunk> ReadTailAsync()
         {
             try

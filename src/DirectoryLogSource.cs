@@ -45,6 +45,8 @@ namespace LogtailR
             {
                 // dont set to EOF since file is newly created and we want to stream its content
                 RegisterFileTailReader(args.FullPath, false);
+                
+                // we want to read newly created file from the beginning
                 RegisterFileUpdate(args.FullPath);
             };
 
@@ -80,24 +82,14 @@ namespace LogtailR
             _fsw.EnableRaisingEvents = true;
         }
 
-        private void RegisterFileTailReader(string file, bool setToEof)
-        {
-            var fileTailReader = new FileTailReader(file);
-            if (setToEof)
-            {
-                fileTailReader.SetToEof();
-            }
-            _fileTailReaders.AddOrUpdate(file, fileTailReader, (s, reader) => reader);
-        }
-
         public IEnumerable<TextChunk> GetChunks()
         {
             while (true)
             {
                 var startOfCheck = DateTime.Now;
                 var chunkYielded = false;
-                var fileNames = _recentlyUpdated.Keys.ToList();
-                foreach (var fn in fileNames)
+                var updatedFiles = GetRecentlyUpdatedFiles();
+                foreach (var fn in updatedFiles)
                 {
                     FileTailReader reader;
                     if (_fileTailReaders.TryGetValue(fn, out reader))
@@ -109,11 +101,12 @@ namespace LogtailR
                             chunkYielded = true;
                         }
 
+
+                        // remove old files from recently updated list so that we
+                        // do not activelly check for new content anymore
                         DateTime updatedAt;
                         if (_recentlyUpdated.TryGetValue(fn, out updatedAt))
                         {
-                            // remove from recently updated if last update is old so that we
-                            // do not activelly check for new content anymore
                             if (!IsUpdateRecentEnough(updatedAt))
                                 _recentlyUpdated.TryRemove(fn, out updatedAt);
                         }
@@ -122,7 +115,7 @@ namespace LogtailR
 
                 //todo: think this through a little bit more
                 var endOfCheck = DateTime.Now;
-                // if there were no changes to files and whole loop took long enough, then wait some time
+                // if there were no changes to files and whole loop took less then X ms, then wait some time
                 if (!chunkYielded && endOfCheck.Subtract(startOfCheck) < TimeSpan.FromMilliseconds(100))
                 {
                     Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
@@ -131,9 +124,22 @@ namespace LogtailR
         // ReSharper disable once FunctionNeverReturns
         }
 
+        
+
         bool IsUpdateRecentEnough(DateTime lastUpdateAt)
         {
-            return DateTime.Now.Subtract(lastUpdateAt) < TimeSpan.FromSeconds(5);
+            return DateTime.Now.Subtract(lastUpdateAt) < TimeSpan.FromSeconds(30);
+        }
+
+
+        private void RegisterFileTailReader(string file, bool setToEof)
+        {
+            var fileTailReader = new FileTailReader(file);
+            if (setToEof)
+            {
+                fileTailReader.SetToEof();
+            }
+            _fileTailReaders.AddOrUpdate(file, fileTailReader, (s, reader) => reader);
         }
 
         private void RegisterFileTailReader(string file, long position)
@@ -150,6 +156,15 @@ namespace LogtailR
         public void RegisterFileUpdate(string fileName, DateTime updateAt)
         {
             _recentlyUpdated.AddOrUpdate(fileName, updateAt, (s, time) => updateAt);
+        }
+
+        /// <summary>
+        /// Returns filenames of recently updated files.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<string> GetRecentlyUpdatedFiles()
+        {
+            return _recentlyUpdated.Keys.ToList();
         }
     }
 }
