@@ -91,9 +91,29 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Web\Fonts\icomoon.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Web\Fonts\icomoon.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Web\Fonts\icomoon.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Web\Styles\style.css.map">
+      <DependentUpon>style.css</DependentUpon>
+    </None>
+    <None Include="Web\Styles\style.less" />
+    <None Include="Web\Styles\_console.less" />
+    <None Include="Web\Styles\_filter.less" />
+    <None Include="Web\Styles\_main.less" />
+    <None Include="Web\Styles\_variables.less" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web\App\Logtail.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web\Fonts\icomoon.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Web\Scripts\jquery-1.6.4-vsdoc.js" />
@@ -105,7 +125,14 @@
     <Content Include="Web\Scripts\jquery.signalR-2.2.0.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Web\Styles\icomoon.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web\Styles\style.css">
+      <DependentUpon>style.less</DependentUpon>
+    </Content>
+    <Content Include="Web\Styles\style.min.css">
+      <DependentUpon>style.css</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
