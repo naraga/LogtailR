@@ -72,8 +72,8 @@
             <span class="icon-open"></span>
         </div>
         <div class="buttons">
-            <span class="icon-start"></span>
-            <span class="icon-stop"></span>
+            <span class="icon-start" id="startBtnSmall"></span>
+            <span class="icon-stop" id="stopBtnSmall"></span>
         </div>
 
     </div>
@@ -126,7 +126,7 @@
                     $("#yellowColorRx").val(tailSettings.YellowColorRx);
                 });
 
-                $("#startBtn").click(function () {
+                $("#startBtn, #startBtnSmall").click(function () {
 
                     // starts with new tail settings
                     logTail.server.startStreaming(
@@ -140,7 +140,7 @@
                     );
                 });
 
-                $("#stopBtn").click(function () {
+                $("#stopBtn, #stopBtnSmall").click(function () {
                     logTail.server.stopStreaming();
                 });
             });
