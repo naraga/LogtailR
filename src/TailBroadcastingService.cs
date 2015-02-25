@@ -70,7 +70,7 @@ namespace LogtailR
             if (session.HasYellowColorRx && Regex.IsMatch(m.Content, session.YellowColorRx, RxMatchingOptions))
                 return "yellow";
 
-            return "white";
+            return "other";
         }
 
         private bool IsMessageForSession(LogMessage m, TailListeningSession session)
