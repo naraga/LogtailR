@@ -1,49 +1,75 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using clipr;
 using LogtailR.Web.Hubs;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 
 namespace LogtailR
 {
+    [ApplicationInfo(Description = "This is a set of options.")]
+    public class Options
+    {
+        [NamedArgument("logs", Action = ParseAction.Append, Description = "Log sources. Example: --logs \"c:\\logs\\*.log|^\\d{2}\\s[a-zA-Z]{3}\\s\\d{4}, \\d{2}:\\d{2}:\\d{2}\\.\\d{3}:\"")]
+        public List<string> Logs { get; set; }
+
+        [NamedArgument("url", Description = "")]
+        public string Url { get; set; }
+
+        [NamedArgument("red", Description = "")]
+        public string Red { get; set; }
+
+        [NamedArgument("white", Description = "")]
+        public string White { get; set; }
+
+        [NamedArgument("yellow", Description = "")]
+        public string Yellow { get; set; }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            //var tmpRndLog = new RandomLogger(@"c:\temp\logtailrlogs", 500);
-            //Task.Factory.StartNew(tmpRndLog.StartWriting, TaskCreationOptions.LongRunning);
+            var opt = CliParser.Parse<Options>(args);
 
-            //todo: how to specify BOM? 
-            //  c:\logs\*.log:BOM       ?
-            //  c:\logs\*.log|BOM       ?
-
-            //todo: how to specify list of different sources?
-            //  c:\logs\*.log,c:\temp\logs\*.log    ?
-
-            var dir = Path.GetDirectoryName(args[0]);
-            var filter = Path.GetFileName(args[0]);
-
-
-            const string url = "http://localhost:8080/logtailr";
+            string url = opt.Url ?? "http://localhost:8080/logtailr";
 
             using (WebApp.Start<Startup>(url))
             {
                 Console.WriteLine("Running on {0}", url);
 
                 var sessionRepo = new TailListeningSessionsRepository();
-                var tailService = TailBroadcastingService.BroadcastDirTail(dir, filter, string.Empty, sessionRepo);
 
-                GlobalHost.DependencyResolver.Register(typeof(LogTailHub), () => new LogTailHub(sessionRepo));
-
+                GlobalHost.DependencyResolver.Register(typeof(LogTailHub), () => new LogTailHub(sessionRepo, opt.Red, opt.White, opt.Yellow));
                 var hub = GlobalHost.ConnectionManager.GetHubContext<LogTailHub>();
 
-                // send single message to specific listener session
-                tailService.NewMessage += 
-                    (sender, eventArgs) => hub.Clients.Client(eventArgs.TargetListeningSession.ConnectionId)
-                    .NewMessage(eventArgs.LogMessage);
+                foreach (var log in opt.Logs)
+                {
+                    if (string.IsNullOrWhiteSpace(log))
+                        continue;
 
-                Task.Factory.StartNew(tailService.StartStreaming, TaskCreationOptions.LongRunning);
+                    var logWithBomSplitted = log.Split('|');
+                    var dirWithMask = logWithBomSplitted[0];
+
+                    var bom = logWithBomSplitted.Length > 1 ? logWithBomSplitted[1] : null;
+
+                    var tailService = TailBroadcastingService.BroadcastDirTail(
+                        Path.GetDirectoryName(dirWithMask), 
+                        Path.GetFileName(dirWithMask), 
+                        bom, 
+                        sessionRepo);
+                    
+                    // send single message to specific listener session
+                    tailService.NewMessage +=
+                        (sender, eventArgs) => hub.Clients.Client(eventArgs.TargetListeningSession.ConnectionId)
+                        .NewMessage(eventArgs.LogMessage);
+
+                    Task.Factory.StartNew(tailService.StartStreaming, TaskCreationOptions.LongRunning);
+                }
+                
+
 
                 Console.WriteLine("Press enter to exit");
                 Console.ReadLine();

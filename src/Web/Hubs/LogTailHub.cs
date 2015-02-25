@@ -4,14 +4,20 @@ using Microsoft.AspNet.SignalR;
 namespace LogtailR.Web.Hubs
 {
     //TODO: strongly typed hub
-    //TODO: use VM instead of TailListeningSession directly
     public class LogTailHub : Hub
     {
         private readonly TailListeningSessionsRepository _listeningSessionsRepo;
+        private readonly string _defaultRedColorRx;
+        private readonly string _defaultWhiteColorRx;
+        private readonly string _defaultYellowColorRx;
 
-        public LogTailHub(TailListeningSessionsRepository listeningSessionsRepo)
+        public LogTailHub(TailListeningSessionsRepository listeningSessionsRepo,
+            string defaultRedColorRx = null, string defaultWhiteColorRx = null, string defaultYellowColorRx = null)
         {
             _listeningSessionsRepo = listeningSessionsRepo;
+            _defaultRedColorRx = defaultRedColorRx;
+            _defaultWhiteColorRx = defaultWhiteColorRx;
+            _defaultYellowColorRx = defaultYellowColorRx;
         }
 
         public LogTailHub()
@@ -20,7 +26,19 @@ namespace LogtailR.Web.Hubs
 
         public override Task OnConnected()
         {
-            _listeningSessionsRepo.AddSession(TailListeningSession.CreateDefault(Context.ConnectionId));
+            var sess = TailListeningSession.CreateDefault(Context.ConnectionId);
+
+            if (!string.IsNullOrWhiteSpace(_defaultRedColorRx))
+                sess.RedColorRx = _defaultRedColorRx;
+
+            if (!string.IsNullOrWhiteSpace(_defaultWhiteColorRx))
+                sess.WhiteColorRx = _defaultWhiteColorRx;
+
+            if (!string.IsNullOrWhiteSpace(_defaultYellowColorRx))
+                sess.YellowColorRx = _defaultYellowColorRx;
+
+            _listeningSessionsRepo.AddSession(sess);
+
             return base.OnConnected();
         }
 
