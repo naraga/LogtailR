@@ -34,7 +34,7 @@ namespace LogtailR
         {
             var opt = CliParser.Parse<Options>(args);
 
-            string url = opt.Url ?? "http://localhost:8080/logtailr";
+            string url = opt.Url ?? "http://+:8080/logtailr";
 
             using (WebApp.Start<Startup>(url))
             {
