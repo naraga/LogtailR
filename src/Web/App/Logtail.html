@@ -106,7 +106,7 @@
             var logTail = $.connection.logTailHub;
             logTail.client.newMessage = function (msg) {
                 //console.log(msg);
-                var encodedContent = $('<div />').text(msg.Message.Source + ': ' + msg.Message.Content).html();
+                var encodedContent = $('<div />').text(/*msg.Message.Source + ': ' + */msg.Message.Content).html().replace(/(?:\r\n|\r|\n)/g, '<br />');
                 $("#messages").append("<div class='" + msg.Color + "-msg'>" + encodedContent + '</div>');
                 $("#messages").animate({
                     scrollTop: $("#messages")[0].scrollHeight
