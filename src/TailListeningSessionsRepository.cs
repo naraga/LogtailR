@@ -74,7 +74,7 @@ namespace LogtailR
                 IncludeRx = "",
                 ExcludeRx = "",
 
-                RedColorRx = "warn",
+                RedColorRx = "warn|error|critical",
                 WhiteColorRx = "info",
                 YellowColorRx = "debug"
             };
