@@ -1,0 +1,66 @@
+﻿@import "_variables";
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.clear::before,
+.clear::after {
+    content: " ";
+    display: table;
+}
+
+.clear::after {
+    clear: both;
+}
+
+body {
+    color: @dark-grey;
+    font: normal 100% Roboto, sans-serif;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: fixed;
+    width: 100%;
+}
+
+header, .toggle-filter ,.messages-tail {
+    float: left;
+    height: 100%;
+    position: relative;
+}
+
+header {
+    background-color: @dark-brown;
+    color: lighten(@light-grey, 29%);
+    display: none;
+    padding: 1em;
+    width: 20%;
+}
+
+h1, h2, h3 {
+    color: @light-brown;
+    font-weight: normal;
+}
+
+h1 {
+    margin: 0;
+}
+
+p {
+    margin: 0;
+
+    &.info {
+        border-top: 0.1em solid @light-brown;
+        color: @light-brown;
+        bottom: 0;
+        font-size: 0.8em;
+        left: 0;
+        padding: 1em;
+        position: absolute;
+        right: 0;
+    }
+}

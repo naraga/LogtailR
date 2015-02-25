@@ -1,0 +1,99 @@
+﻿@import "_variables";
+
+/* filter styling */
+
+header > div {
+    margin: 2.5em 0;
+}
+
+label,
+input {
+    display: block;
+}
+
+input {
+    background-color: @dark-grey;
+    border: none;
+    margin: 0.5em 0 1em;
+    padding: 1em;
+    width: 100%;
+
+    &[type=checkbox] {
+        display: inline-block;
+        margin-right: 1em;
+        width: auto;
+    }
+
+    &[type=button] {
+        background-color: @light-green;
+        float: left;
+        margin: 0 2%;
+        -moz-transition: all 0s ease-out;
+        -o-transition: all 0s ease-out;
+        -webkit-transition: all 0s ease-out;
+        transition: all 0.5s ease-out;
+        width: 46%;
+
+
+        &:hover {
+            background-color: @dark-green;
+        }
+    }
+}
+
+/* toggle bar */
+
+.toggle-filter {
+    background-color: lighten(@dark-grey, 10%);
+    color: @light-grey;
+    cursor: pointer;
+    text-align: center;
+    width: 2.5%;
+}
+
+.toggle-filter span,
+.toggle-button {
+    padding: 1em 0;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+}
+
+.toggle-button {
+    color: @light-brown;
+
+    &:hover {
+         .darken-on-hover(@light-brown);
+    }
+
+    span:hover {
+        background-color: transparent;
+    }
+}
+
+
+.buttons {
+    border-bottom: 0.1em solid @dark-grey;
+    border-top: 0.1em solid @dark-grey;
+
+    span {
+        display: block;
+
+        &.icon-start {
+            color: @light-green;
+
+            &:hover {
+                .darken-on-hover(@light-green);
+            }
+        }
+
+        &.icon-stop {
+            color: @indian-red;
+
+            &:hover {
+                .darken-on-hover(@indian-red);
+            }
+        }
+    }
+}

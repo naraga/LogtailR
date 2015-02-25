@@ -1,0 +1,33 @@
+﻿@import "_variables";
+
+/* console styling */
+
+.messages-tail {
+    background-color: @dark-grey;
+    color: @light-grey;
+    font-family: 'Source Code Pro', monospace;
+    overflow-y: auto;
+    padding: 1em;
+    width: 97.5%;
+
+    &.toggled {
+        width: 77.5%;
+    }
+
+    div {
+        margin-bottom: 0.25em;
+        
+    }
+}
+
+.red-msg {
+    color: @red;
+}
+
+.white-msg {
+    color: @white;
+}
+
+.yellow-msg {
+    color: @yellow;
+}

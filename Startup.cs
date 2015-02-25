@@ -14,6 +14,7 @@ namespace LogtailR
             app.UseStaticFiles("/Web/App");
             app.UseStaticFiles("/Web/Scripts");
             app.UseStaticFiles("/Web/Styles");
+            app.UseStaticFiles("/Web/Fonts");
 
             app.Map("/xxx", map =>
             {
