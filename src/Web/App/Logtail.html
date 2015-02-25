@@ -64,8 +64,8 @@
 
                 var logTail = $.connection.logTailHub;
                 logTail.client.newMessage = function (msg) {
-                    //console.log(msg);
-                    var encodedContent = $('<div />').text(msg.Message.Content).html();
+                    console.log(msg);
+                    var encodedContent = $('<div />').text(msg.Message.Content).html().replace(/(?:\r\n|\r|\n)/g, '<br />');
                     $("#messages").append("<div class='" + msg.Color + "-msg'>" + encodedContent + '</div>');
                 };
 
