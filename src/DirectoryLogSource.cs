@@ -86,7 +86,7 @@ namespace LogtailR
         {
             while (true)
             {
-                var startOfCheck = DateTime.Now;
+                var startOfCheckAt = DateTime.Now;
                 var chunkYielded = false;
                 var updatedFiles = GetRecentlyUpdatedFiles();
                 foreach (var fn in updatedFiles)
@@ -102,8 +102,8 @@ namespace LogtailR
                         }
 
 
-                        // remove old files from recently updated list so that we
-                        // do not activelly check for new content anymore
+                        // remove file from recently updated list so that we
+                        // do not activelly check for its new content anymore
                         DateTime updatedAt;
                         if (_recentlyUpdated.TryGetValue(fn, out updatedAt))
                         {
@@ -114,9 +114,9 @@ namespace LogtailR
                 }
 
                 //todo: think this through a little bit more
-                var endOfCheck = DateTime.Now;
+                var endOfCheckAt = DateTime.Now;
                 // if there were no changes to files and whole loop took less then X ms, then wait some time
-                if (!chunkYielded && endOfCheck.Subtract(startOfCheck) < TimeSpan.FromMilliseconds(100))
+                if (!chunkYielded && endOfCheckAt.Subtract(startOfCheckAt) < TimeSpan.FromMilliseconds(100))
                 {
                     Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
                 }
@@ -128,7 +128,7 @@ namespace LogtailR
 
         bool IsUpdateRecentEnough(DateTime lastUpdateAt)
         {
-            return DateTime.Now.Subtract(lastUpdateAt) < TimeSpan.FromSeconds(30);
+            return DateTime.Now.Subtract(lastUpdateAt) < TimeSpan.FromMinutes(5);
         }
 
 
