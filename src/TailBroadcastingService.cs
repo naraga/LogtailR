@@ -25,8 +25,8 @@ namespace LogtailR
             TailListeningSessionsRepository listeningSessions)
         {
             var dirLogSource = new DirectoryLogSource(directoryName, fileNameFilter, true);
-            dirLogSource.ScanContent();
             dirLogSource.StartWatching();
+            dirLogSource.ScanContent();
 
             var textChunksStreamReader = new TextChunksStreamReader(dirLogSource.GetChunks());
             textChunksStreamReader.SetOutput(bomRx);

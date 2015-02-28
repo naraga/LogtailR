@@ -18,6 +18,11 @@ namespace LogtailR
             LastPosition = new FileInfo(_fileName).Length;
         }
 
+        public DateTime LastWriteTime
+        {
+            get { return new FileInfo(_fileName).LastWriteTime; }
+        }
+
         /// <summary>
         /// 
         /// </summary>

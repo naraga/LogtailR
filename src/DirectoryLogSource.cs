@@ -31,7 +31,9 @@ namespace LogtailR
             //todo: handle UnauthorizedAccessException https://msdn.microsoft.com/en-us/library/vstudio/dd997370(v=vs.100).aspx
             foreach (var file in files)
             {
-                RegisterFileTailReader(file, true);
+                var reader = RegisterFileTailReader(file, true);
+                if(IsUpdateRecentEnough(reader.LastWriteTime))
+                    RegisterFileUpdate(file, reader.LastWriteTime);
             }
         }
 
@@ -61,7 +63,18 @@ namespace LogtailR
                 _fileTailReaders.TryRemove(args.FullPath, out reader);
             };
 
-            _fsw.Changed += (sender, args) => RegisterFileUpdate(args.FullPath);
+            _fsw.Changed += (sender, args) =>
+            {
+                var fileName = args.FullPath;
+
+                // just to be sure we have tail reader (could happen during initialization before ScanContent() call)
+                if(!_fileTailReaders.ContainsKey(fileName))
+                {
+                    RegisterFileTailReader(fileName, false);
+                }
+                
+                RegisterFileUpdate(fileName);
+            };
 
             _fsw.Renamed += (sender, args) =>
             {
@@ -132,7 +145,7 @@ namespace LogtailR
         }
 
 
-        private void RegisterFileTailReader(string file, bool setToEof)
+        private FileTailReader RegisterFileTailReader(string file, bool setToEof)
         {
             var fileTailReader = new FileTailReader(file);
             if (setToEof)
@@ -140,6 +153,8 @@ namespace LogtailR
                 fileTailReader.SetToEof();
             }
             _fileTailReaders.AddOrUpdate(file, fileTailReader, (s, reader) => reader);
+
+            return fileTailReader;
         }
 
         private void RegisterFileTailReader(string file, long position)
