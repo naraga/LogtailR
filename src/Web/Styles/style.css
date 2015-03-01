@@ -155,10 +155,20 @@ input[type=button]:hover {
 .red-msg {
   color: #e22121;
 }
+.red-msg:hover {
+  background-color: #999999;
+}
 .white-msg {
   color: #ffffff;
 }
+.white-msg:hover {
+  background-color: #999999;
+}
 .yellow-msg {
   color: #ffd800;
+}
+.yellow-msg:hover {
+  color: #ffd800;
+  background-color: #999999;
 }
 /*# sourceMappingURL=style.css.map */
