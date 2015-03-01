@@ -82,7 +82,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="TailBroadcastingService.cs" />
+    <Compile Include="LogBroadcastingService.cs" />
     <Compile Include="TailListeningSessionsRepository.cs" />
     <Compile Include="TextChunkSplitter.cs" />
     <Compile Include="TextChunksStreamReader.cs" />

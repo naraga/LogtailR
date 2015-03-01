@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 namespace LogtailR
 {
     //TODO: use reactive extensions ?
-    public class TailBroadcastingService
+    public class LogBroadcastingService
     {
         private readonly IEnumerable<LogMessage> _logMessages;
         private readonly TailListeningSessionsRepository _listeningSessions;
@@ -14,14 +14,14 @@ namespace LogtailR
 
         public event EventHandler<TailNewMessageEventArgs> NewMessage = delegate { };
 
-        public TailBroadcastingService(IEnumerable<LogMessage> logMessages, TailListeningSessionsRepository listeningSessions)
+        public LogBroadcastingService(IEnumerable<LogMessage> logMessages, TailListeningSessionsRepository listeningSessions)
         {
             _logMessages = logMessages;
             _listeningSessions = listeningSessions;
         }
 
-        public static TailBroadcastingService BroadcastDirTail(
-            string directoryName, string fileNameFilter, string bomRx, 
+        public static LogBroadcastingService BroadcastDirTail(
+            string directoryName, string fileNameFilter, string bomRx,
             TailListeningSessionsRepository listeningSessions)
         {
             var dirLogSource = new DirectoryLogSource(directoryName, fileNameFilter, true);
@@ -30,7 +30,7 @@ namespace LogtailR
 
             var textChunksStreamReader = new TextChunksStreamReader(dirLogSource.GetChunks());
             textChunksStreamReader.SetOutput(bomRx);
-            return new TailBroadcastingService(textChunksStreamReader.GetMessages(), listeningSessions);
+            return new LogBroadcastingService(textChunksStreamReader.GetMessages(), listeningSessions);
         }
 
         public void StartStreaming()
