@@ -74,6 +74,7 @@
         <div class="buttons">
             <span class="icon-start" id="startBtnSmall"></span>
             <span class="icon-stop" id="stopBtnSmall"></span>
+            <span id="clearBtnSmall">C</span>
         </div>
 
     </div>
@@ -142,6 +143,10 @@
 
                 $("#stopBtn, #stopBtnSmall").click(function () {
                     logTail.server.stopStreaming();
+                });
+
+                $("#clearBtnSmall").click(function () {
+                    $("#messages").empty();
                 });
             });
         });
