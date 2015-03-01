@@ -76,10 +76,17 @@ namespace LogtailR
         private bool IsMessageForSession(LogMessage m, TailListeningSession session)
         {
             if (session.HasIncludeRx)
-                return Regex.IsMatch(m.Content, session.IncludeRx, RxMatchingOptions);
+                return 
+                    Regex.IsMatch(m.Content, session.IncludeRx, RxMatchingOptions) ||
+                    Regex.IsMatch(m.Source, session.IncludeRx, RxMatchingOptions);
             
             if (session.HasExcludeRx)
-                return !Regex.IsMatch(m.Content, session.ExcludeRx, RxMatchingOptions);
+                return 
+                    !
+                    (
+                    Regex.IsMatch(m.Content, session.ExcludeRx, RxMatchingOptions) ||
+                    Regex.IsMatch(m.Source, session.ExcludeRx, RxMatchingOptions)
+                    );
 
             return true;
         }
